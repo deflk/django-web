@@ -4,7 +4,8 @@ from django.contrib import auth
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.http import JsonResponse
-from .forms import LoginForm, RegForm
+from .forms import LoginForm, RegForm, ChangeNicknameForm
+from .models import Profile
 
 
 def login_for_medal(request):
@@ -17,6 +18,7 @@ def login_for_medal(request):
     else:
         data['status'] = 'ERROR'
     return JsonResponse(data)
+
 
 def login(request):
     if request.method == 'POST':
@@ -31,6 +33,7 @@ def login(request):
     context = {}
     context['login_form'] = login_form
     return render(request, 'user/login.html', context)
+
 
 def register(request):
     if request.method == 'POST':
@@ -52,11 +55,35 @@ def register(request):
     context = {}
     context['reg_form'] = reg_form
     return render(request, 'user/register.html', context)
-    
+
+
 def logout(request):
     auth.logout(request)
     return redirect(request.GET.get('from', reverse('home')))
 
+
 def user_info(request):
     context = {}
     return render(request, 'user/user_info.html', context)
+
+
+def change_nickname(request):
+    redirect_to = request.GET.get('from', reverse('home'))
+    if request.method == 'POST':
+        form = ChangeNicknameForm(request.POST, user=request.user)
+        if form.is_valid():
+            nickname_new = form.cleaned_data['nickname_new']
+            profile, created = Profile.objects.get_or_create(user=request.user)
+            profile.nickname = nickname_new
+            profile.save()
+            return redirect(redirect_to)
+    else:
+        form = ChangeNicknameForm()
+
+    context = {}
+    context['page_title'] = '修改昵称'
+    context['form_title'] = '修改昵称'
+    context['submit_text'] = '修改'
+    context['form'] = form
+    context['return_back_url'] = redirect_to
+    return render(request, 'form.html', context)

@@ -33,7 +33,7 @@ def get_blog_list_common_data(request, blogs_all_list):
     blog_dates_dict = {}
     for blog_date in blog_dates:
         blog_count = Blog.objects.filter(created_time__year=blog_date.year,
-                                        created_time__month=blog_date.month).count()
+                                         created_time__month=blog_date.month).count()
         blog_dates_dict[blog_date] = blog_count
 
     context = {}
@@ -44,10 +44,12 @@ def get_blog_list_common_data(request, blogs_all_list):
     context['blog_dates'] = blog_dates_dict
     return context
 
+
 def blog_list(request):
     blogs_all_list = Blog.objects.all()
     context = get_blog_list_common_data(request, blogs_all_list)
     return render(request, 'myblog/blog_list.html', context)
+
 
 def blogs_with_type(request, blog_type_pk):
     blog_type = get_object_or_404(BlogType, pk=blog_type_pk)
@@ -57,11 +59,13 @@ def blogs_with_type(request, blog_type_pk):
     context['blog_type'] = blog_type
     return render(request, 'myblog/blogs_with_type.html', context)
 
+
 def blogs_with_date(request, year, month):
     blogs_all_list = Blog.objects.filter(created_time__year=year, created_time__month=month)
     context = get_blog_list_common_data(request, blogs_all_list)
     context['blogs_with_date'] = '%s年%s月' % (year, month)
     return render(request, 'myblog/blogs_with_date.html', context)
+
 
 def blog_detail(request, blog_pk): 
     blog = get_object_or_404(Blog, pk=blog_pk)

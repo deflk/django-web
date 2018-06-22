@@ -8,6 +8,7 @@ from django.urls import reverse
 from read_count.utils import get_seven_days_read_data, get_today_hot_data, get_yesterday_hot_data
 from myblog.models import Blog
 
+
 def get_7_days_hot_blogs():
 	today = timezone.now().date()
 	date = today - datetime.timedelta(days=7)
@@ -18,11 +19,12 @@ def get_7_days_hot_blogs():
 				.order_by('-read_num_sum')
 	return blogs[:7]	
 
+
 def home(request):
 	blog_content_type = ContentType.objects.get_for_model(Blog)
 	dates, read_nums = get_seven_days_read_data(blog_content_type)
 
-	#　获取７天热门博客的缓存数据
+	# 获取７天热门博客的缓存数据
 	hot_blogs_for_7_days = cache.get('hot_blogs_for_7_days')
 	if hot_blogs_for_7_days is None:
 		hot_blogs_for_7_days = get_7_days_hot_blogs()
