@@ -14,17 +14,22 @@
                         <form action="" method="POST">
                             {% csrf_token %}
                             {% for field in form %}
-                                {% if field.is_hidden %}
+                                {% if not field.is_hidden %}
                                     <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                                 {% endif %}
                                 {{ field }}
                                 <p class="text-danger">{{ field.errors.as_text }}</p>
                             {% endfor %}
-                            <span class="pull-left text-danger">{{ form.non_field_errors }}</span>
-                            <div class="pull-right">
-                                <input type="submit" value="{{ submit_text }}" class="btn btn-primary pull-right">
-                                <button class="btn default" onclick="window.location.href='{{ return_back_url }}'">返回</button>
+                            <span id="tip" class="text-danger">{{ form.non_field_errors }}</span>
+                            <div class="clearfix"></div>
+                            <div class="pull-left">
+                                {% block other_buttons %}{% endblock %}
                             </div>
+                            <div class="pull-right">
+                                <input type="submit" value="{{ submit_text }}" class="btn btn-primary">
+                                <button class="btn btn-default" onclick="window.location.href='{{ return_back_url }}'">返回</button>
+                            </div>
+
                         </form>
                     </div>
                 </div>
