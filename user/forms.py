@@ -7,7 +7,7 @@ class LoginForm(forms.Form):
     username_or_email = forms.CharField(
         label='用户名',
         widget=forms.TextInput(
-            attrs={'class':'form-control', 'placeholder':'请输入用户名或邮箱'}
+            attrs={'class': 'form-control', 'placeholder': '请输入用户名或邮箱'}
         )
     )
     password = forms.CharField(
