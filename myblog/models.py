@@ -13,8 +13,8 @@ class BlogType(models.Model):
         return self.type_name
  
 
-class Blog(models.Model,ReadNumExpandMethod):
-    title = models.CharField(max_length=50)
+class Blog(models.Model, ReadNumExpandMethod):
+    title = models.CharField(max_length=150)
     blog_type = models.ForeignKey(BlogType, on_delete=models.CASCADE)
     content = RichTextUploadingField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
